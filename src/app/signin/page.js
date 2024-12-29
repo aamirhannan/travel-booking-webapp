@@ -16,7 +16,7 @@ export default function SignIn() {
 
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
-    const { user } = useContext(AuthContext);
+    const { user, setUser } = useContext(AuthContext);
 
 
     useEffect(() => {
@@ -62,6 +62,16 @@ export default function SignIn() {
         console.log("SignIn");
         const signinStatus = await handleSignInAPICall();
         console.log("signinStatus :: ", signinStatus);
+        if (signinStatus?.status === 200) {
+            if (signinStatus.message === "SIGNIN_SUCCESS") {
+                setUser(signinStatus.data);
+                router.push("/book-tickets");
+            } else {
+                setFormData({ ...formData, passwordError: "Something went wrong" });
+            }
+        } else {
+            setFormData({ ...formData, passwordError: "Something went wrong" });
+        }
     }
 
     const handleSignInAPICall = async () => {
@@ -71,6 +81,7 @@ export default function SignIn() {
         });
 
         console.log("response :: ", response);
+        return response.data.data;
     }
 
     const handleChange = (e) => {

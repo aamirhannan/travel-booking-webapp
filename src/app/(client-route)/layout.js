@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { AuthContext } from "@/components/context/authContext";
 import { useContext, useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
+import Link from "next/link";
 
 export default function ClientLayout({ children }) {
     const [isLoading, setIsLoading] = useState(true);
@@ -14,7 +15,7 @@ export default function ClientLayout({ children }) {
         if (!user) {
             router.push("/signin");
         }
-        
+
         setTimeout(() => {
             setIsLoading(false);
         }, 500);
@@ -26,10 +27,12 @@ export default function ClientLayout({ children }) {
     }
 
     return (
-        <html lang="en">
-            <body className="app-container">
-                {children}
-            </body>
-        </html>
+        <main className="app-container">
+            <nav>
+                <Link href="/book-tickets">Book Tickets</Link>
+                <Link href="/profile">Profile</Link>
+            </nav>
+            {children}
+        </main>
     );
 }
